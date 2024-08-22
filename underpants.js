@@ -21,7 +21,10 @@ var _ = {};
 *   _.identity({a: "b"}) === {a: "b"}
 */
 
-//hello i am rowan
+// define the function, it should take in the value
+// return the value
+
+_.identity = (val) => val;
 
 /** _.typeOf
 * Arguments:
@@ -43,6 +46,17 @@ var _ = {};
 * _.typeOf([1,2,3]) -> "array"
 */
 
+// store value in function declaration
+// if it is an array, return "array"
+// if it is null, return "null"
+// otherwise, return typeof value
+
+_.typeOf = (val) => {
+    if (Array.isArray(val) === true) {
+        return "array";
+    }
+    return val === null ? "null" : typeof val;
+};
 
 /** _.first
 * Arguments:
@@ -62,6 +76,24 @@ var _ = {};
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
 */
 
+// declare function, take an array and a number
+// check if it is an array
+    // if its not, return []
+// if number is not a number
+    //return first element in an array
+// if number is a number...
+    // if it's negative, return []
+    // return the first _ elements in the array. if it's bigger, return the full array.
+
+_.first = (arr, num) => {
+    if (!(Array.isArray(arr)) || num < 0 || isNaN(num)) {
+        return isNaN(num) ? arr[0] : [];
+    }
+    if (num > arr.length) {
+        return arr;
+    }
+    return arr.slice(0, num);
+};
 
 /** _.last
 * Arguments:
