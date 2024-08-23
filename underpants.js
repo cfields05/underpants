@@ -113,23 +113,52 @@ _.first = (arr, num) => {
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
 */
 
+// last should accept an array and a number
+// if arr is not an array or num is negative, return []
+// if num is not a number, return last element
+// if num > arr.length, return whole array
+// return last {number} amount of items in the array otherwise
+
+_.last = (arr, num) => {
+    if (!(Array.isArray(arr)) || num < 0 || isNaN(num)) {
+        return isNaN(num) ? arr[arr.length - 1] : [];
+    }
+    if (num > arr.length) {
+        return arr;
+    }
+    return arr.slice(arr.length - num, arr.length);
+};
+
 
 /** _.indexOf
 * Arguments:
 *   1) An array
 *   2) A value
 * Objectives:
-*   1) Return the index of <array> that is the first occurrance of <value>
+*   1) Return the index of <array> that is the first occurrence of <value>
 *   2) Return -1 if <value> is not in <array>
 *   3) Do not use [].indexOf()!
 * Edge Cases:
-*   1) What if <array> has multiple occurances of val?
+*   1) What if <array> has multiple occurrences of val?
 *   2) What if <val> isn't in <array>?
 * Examples:
 *   _.indexOf(["a","b","c"], "c") -> 2
 *   _.indexOf(["a","b","c"], "d") -> -1
 */
 
+// takes in an array and a value
+// return index of arr that is FIRST occurrence of val
+// return -1 if val is not present
+// don't use [].indexOf()
+
+_.indexOf = (arr, val) => {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === val) {
+            return i;
+        }
+    }
+    return -1;
+};
 
 /** _.contains
 * Arguments:
@@ -146,6 +175,11 @@ _.first = (arr, num) => {
 *   _.contains([1,"two", 3.14], "two") -> true
 */
 
+// accepts array and a value
+// return true if arr contains val, otherwise false
+// must use ternary
+
+_.contains = (arr, val) => (arr.includes(val)) ? true : false;
 
 /** _.each
 * Arguments:
@@ -154,15 +188,32 @@ _.first = (arr, num) => {
 * Objectives:
 *   1) if <collection> is an array, call <function> once for each element
 *      with the arguments:
-*         the element, it's index, <collection>
+*         the element, its index, <collection>
 *   2) if <collection> is an object, call <function> once for each property
 *      with the arguments:
-*         the property's value, it's key, <collection>
+*         the property's value, its key, <collection>
 * Examples:
 *   _.each(["a","b","c"], function(e,i,a){ console.log(e)});
 *      -> should log "a" "b" "c" to the console
 */
 
+// accepts a collection of values and a function
+// if collection is array, call function once per element
+// w/ arguments of element, its index, <collection>
+// if collection is an object, call function once per property
+// w/ arguments of property value, its key, <collection>
+
+_.each = (col, func) => {
+    if (Array.isArray(col)) {
+        for (let i = 0; i < col.length; i++) {
+            func(col[i], i, col);
+        }
+    } else {
+        for (let property in col) {
+            func(col[property], property, col);
+        }
+    }
+};
 
 /** _.unique
 * Arguments:
@@ -174,6 +225,20 @@ _.first = (arr, num) => {
 *   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
 */
 
+// accepts an array
+// return a new array of all elems with duplicates removed
+// use _.indexOf()
+
+_.unique = (arr) => {
+    const newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (_.indexOf(arr, arr[i]) === i) {
+            newArr.push(arr[i]);
+        }
+    }
+
+    return newArr;
+};
 
 /** _.filter
 * Arguments:
@@ -181,7 +246,7 @@ _.first = (arr, num) => {
 *   2) A function
 * Objectives:
 *   1) call <function> for each element in <array> passing the arguments:
-*      the element, it's index, <array>
+*      the element, its index, <array>
 *   2) return a new array of elements for which calling <function> returned true
 * Edge Cases:
 *   1) What if <function> returns something other than true or false?
@@ -191,6 +256,20 @@ _.first = (arr, num) => {
 *   use _.each in your implementation
 */
 
+// accepts an array and a function
+// call func for each elem in array
+// w/ arguments of element, its index, <array>
+// return new array for which calling function returned true
+
+_.filter = (arr, func) => {
+    const newArr = [];
+    _.each(arr, function(elem, index, arr2) {
+        if (func(elem, index, arr2)) {
+            newArr.push(elem);
+        }
+    });
+    return newArr;
+};
 
 /** _.reject
 * Arguments:
@@ -198,13 +277,28 @@ _.first = (arr, num) => {
 *   2) A function
 * Objectives:
 *   1) call <function> for each element in <array> passing the arguments:
-*      the element, it's index, <array>
+*      the element, its index, <array>
 *   2) return a new array of elements for which calling <function> returned false
 *   3) This is the logical inverse if _.filter()
 * Examples:
 *   _.reject([1,2,3,4,5], function(e){return e%2 === 0}) -> [1,3,5]
 */
 
+// accepts an array and a function
+// call func for each elem
+// w/ arguments of element, index, array
+// return new array of elems for which calling function returned false
+// opposite of _.filter()
+
+_.reject = (arr, func) => {
+    const newArr = [];
+    _.each(arr, function(elem, index, arr2) {
+        if (!(func(elem, index, arr2))) {
+            newArr.push(elem);
+        }
+    });
+    return newArr;
+};
 
 /** _.partition
 * Arguments:
@@ -225,6 +319,24 @@ _.first = (arr, num) => {
 }
 */
 
+// accepts array and a function
+// call function for for each elem
+// w/ arguments of elem, key, arr
+// return arr of 2 sub arrs:
+//    array that contains all values for truthy
+//    array that contains all values for falsy
+
+_.partition = (arr, func) => {
+    const newArr = [[], []];
+    _.each(arr, function(elem, index, arr2) {
+        if (func(elem, index, arr2)) {
+            newArr[0].push(elem);
+        } else {
+            newArr[1].push(elem);
+        }
+    });
+    return newArr;
+};
 
 /** _.map
 * Arguments:
@@ -233,15 +345,29 @@ _.first = (arr, num) => {
 * Objectives:
 *   1) call <function> for each element in <collection> passing the arguments:
 *        if <collection> is an array:
-*            the element, it's index, <collection>
+*            the element, its index, <collection>
 *        if <collection> is an object:
-*            the value, it's key, <collection>
+*            the value, its key, <collection>
 *   2) save the return value of each <function> call in a new array
 *   3) return the new array
 * Examples:
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
 
+// accepts a collection and a function
+// call func for each elem in collection passing arguments:
+//     if coll is an array: elem, its index, and the collection
+//     if coll is an object: its value, its key, and the collection
+// save and return value of each function call in a new array
+// return new array
+
+_.map = (col, func) => {
+    const newArr = [];
+    _.each(col, function(elem, index, collection) {
+        newArr.push(func(elem, index, collection));
+    });
+    return newArr;
+};
 
 /** _.pluck
 * Arguments:
@@ -254,6 +380,15 @@ _.first = (arr, num) => {
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
+// accepts array of objects and a property
+// return array containing property for every elem
+// must use _.map()
+
+_.pluck = (objArr, property) => {
+    return _.map(objArr, function(elem, index, col) {
+        return elem[property];
+    });
+};
 
 /** _.every
 * Arguments:
@@ -262,7 +397,7 @@ _.first = (arr, num) => {
 * Objectives:
 *   1) Call <function> for every element of <collection> with the paramaters:
 *      if <collection> is an array:
-*          current element, it's index, <collection>
+*          current element, its index, <collection>
 *      if <collection> is an object:
 *          current value, current key, <collection>
 *   2) If the return value of calling <function> for every element is true, return true
@@ -276,6 +411,27 @@ _.first = (arr, num) => {
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
+// accepts a collection and a func
+// call function for every elem of collection with following parameters:
+//      if array, current elem, its index, collection
+//      if object, current val, its key, collection
+// if all elements are true, return true
+// if any are false, return false
+// if no function, return true if all truthy, otherwise false
+
+_.every = (col, func) => {
+    let hasFalse = false;
+    _.each(col, function(elem, index, collection) {
+        if (!(func(elem, index, collection))) {
+            hasFalse = true;
+        }
+    });
+    if (hasFalse) {
+        return false;
+    } else {
+        return true;
+    }
+};
 
 /** _.some
 * Arguments:

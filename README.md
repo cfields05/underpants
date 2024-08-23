@@ -2,7 +2,7 @@
 This activity is essentially a re-write of [underscore.js](http://underscorejs.org/).
 
 ## Why?
-In the past exercises we've been writing a lot of loops over objects and arrays ourselves. Instead of doing that, we are going to write several fuctions to handle the looping for us. These functions are used every day by professional developers and we're well on our way to becoming professional developers!!
+In the past exercises we've been writing a lot of loops over objects and arrays ourselves. Instead of doing that, we are going to write several functions to handle the looping for us. These functions are used every day by professional developers and we're well on our way to becoming professional developers!!
 
 This means that if we're confused about how a function should work, we can check the underscore.js documentation linked above for help.
 
