@@ -78,12 +78,12 @@ _.typeOf = (val) => {
 
 // declare function, take an array and a number
 // check if it is an array
-    // if its not, return []
+// if its not, return []
 // if number is not a number
-    //return first element in an array
+//return first element in an array
 // if number is a number...
-    // if it's negative, return []
-    // return the first _ elements in the array. if it's bigger, return the full array.
+// if it's negative, return []
+// return the first _ elements in the array. if it's bigger, return the full array.
 
 _.first = (arr, num) => {
     if (!(Array.isArray(arr)) || num < 0 || isNaN(num)) {
@@ -263,7 +263,7 @@ _.unique = (arr) => {
 
 _.filter = (arr, func) => {
     const newArr = [];
-    _.each(arr, function(elem, index, arr2) {
+    _.each(arr, function (elem, index, arr2) {
         if (func(elem, index, arr2)) {
             newArr.push(elem);
         }
@@ -292,7 +292,7 @@ _.filter = (arr, func) => {
 
 _.reject = (arr, func) => {
     const newArr = [];
-    _.each(arr, function(elem, index, arr2) {
+    _.each(arr, function (elem, index, arr2) {
         if (!(func(elem, index, arr2))) {
             newArr.push(elem);
         }
@@ -328,7 +328,7 @@ _.reject = (arr, func) => {
 
 _.partition = (arr, func) => {
     const newArr = [[], []];
-    _.each(arr, function(elem, index, arr2) {
+    _.each(arr, function (elem, index, arr2) {
         if (func(elem, index, arr2)) {
             newArr[0].push(elem);
         } else {
@@ -363,7 +363,7 @@ _.partition = (arr, func) => {
 
 _.map = (col, func) => {
     const newArr = [];
-    _.each(col, function(elem, index, collection) {
+    _.each(col, function (elem, index, collection) {
         newArr.push(func(elem, index, collection));
     });
     return newArr;
@@ -385,7 +385,7 @@ _.map = (col, func) => {
 // must use _.map()
 
 _.pluck = (objArr, property) => {
-    return _.map(objArr, function(elem, index, col) {
+    return _.map(objArr, function (elem, index, col) {
         return elem[property];
     });
 };
@@ -421,16 +421,20 @@ _.pluck = (objArr, property) => {
 
 _.every = (col, func) => {
     let hasFalse = false;
-    _.each(col, function(elem, index, collection) {
-        if (!(func(elem, index, collection))) {
-            hasFalse = true;
-        }
-    });
-    if (hasFalse) {
-        return false;
+    if (_.typeOf(func) !== "function") {
+        _.each(col, function (elem, index, collection) {
+            if (!(elem)) {
+                hasFalse = true;
+            }
+        })
     } else {
-        return true;
+        _.each(col, function (elem, index, collection) {
+            if (!(func(elem, index, collection))) {
+                hasFalse = true;
+            }
+        });
     }
+    return (hasFalse) ? false : true;
 };
 
 /** _.some
@@ -454,6 +458,31 @@ _.every = (col, func) => {
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
 */
 
+// accepts a collection and a func
+// call function for every elem of collection with following parameters:
+//      if array, current elem, its index, collection
+//      if object, current val, its key, collection
+// if all elements are false, return false
+// if any are true, return true
+// if no function, return false if all falsy, otherwise true
+
+_.some = (col, func) => {
+    let hasTrue = false;
+    if (_.typeOf(func) !== "function") {
+        _.each(col, function (elem, index, collection) {
+            if (elem) {
+                hasTrue = true;
+            }
+        })
+    } else {
+        _.each(col, function (elem, index, collection) {
+            if (func(elem, index, collection)) {
+                hasTrue = true;
+            }
+        });
+    }
+    return (hasTrue) ? true : false;
+};
 
 /** _.reduce
 * Arguments:
@@ -474,6 +503,26 @@ _.every = (col, func) => {
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
+// Create the reduce function, it takes array, function, and seed
+// call the function for every element, passing prev, element, index.
+    // if there is no seed, use the first element
+    // otherwise, use seed as prev.
+    // when you call the function next, prev is whatever the function returns
+// return the result of the final function call.
+
+_.reduce = (arr, func, seed) => {
+    let prev = seed
+    let counter = 0;
+    if (prev === undefined) {
+      prev = arr[0];  
+      counter = 1;
+    }
+    while (counter < arr.length) {
+        prev = func(prev, arr[counter], counter);
+        counter++;
+    }
+    return prev;
+}
 
 /** _.extend
 * Arguments:
@@ -494,8 +543,8 @@ _.every = (col, func) => {
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-if((typeof process !== 'undefined') &&
-   (typeof process.versions.node !== 'undefined')) {
+if ((typeof process !== 'undefined') &&
+    (typeof process.versions.node !== 'undefined')) {
     // here, export any references you need for tests //
     module.exports = _;
 }
