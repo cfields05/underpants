@@ -539,6 +539,22 @@ _.reduce = (arr, func, seed) => {
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
 
+// create the function, take in theoretically infinite arguments, all of which should be objects.
+// iterate over every other object, modifying object 1.
+    // put each property as a property of the object 1 copy.
+// return the copy.
+
+_.extend = (...objs) => {
+    for (let i = 1; i < objs.length; i++) {
+        for (let key in objs[i]) {
+            objs[0][key] = objs[i][key];
+        }
+    }
+    return objs[0]
+}
+
+
+
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
