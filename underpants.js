@@ -395,7 +395,7 @@ _.pluck = (objArr, property) => {
 *   1) A collection
 *   2) A function
 * Objectives:
-*   1) Call <function> for every element of <collection> with the paramaters:
+*   1) Call <function> for every element of <collection> with the parameters:
 *      if <collection> is an array:
 *          current element, its index, <collection>
 *      if <collection> is an object:
@@ -420,21 +420,21 @@ _.pluck = (objArr, property) => {
 // if no function, return true if all truthy, otherwise false
 
 _.every = (col, func) => {
-    let hasFalse = false;
+    let allTrue  = true;
     if (_.typeOf(func) !== "function") {
         _.each(col, function (elem, index, collection) {
             if (!(elem)) {
-                hasFalse = true;
+                allTrue = false;
             }
         })
     } else {
         _.each(col, function (elem, index, collection) {
             if (!(func(elem, index, collection))) {
-                hasFalse = true;
+                allTrue = false;
             }
         });
     }
-    return (hasFalse) ? false : true;
+    return allTrue;
 };
 
 /** _.some
@@ -442,7 +442,7 @@ _.every = (col, func) => {
 *   1) A collection
 *   2) A function
 * Objectives:
-*   1) Call <function> for every element of <collection> with the paramaters:
+*   1) Call <function> for every element of <collection> with the parameters:
 *       if <collection> is an array:
 *        current element, it's index, <collection>
 *       if <collection> is an object:
@@ -481,7 +481,7 @@ _.some = (col, func) => {
             }
         });
     }
-    return (hasTrue) ? true : false;
+    return hasTrue;
 };
 
 /** _.reduce
